@@ -12,6 +12,9 @@ class JuezSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PuntuacionSerializer(serializers.ModelSerializer):
+    participante_nombre = serializers.CharField(source='participante.nombre', read_only=True)
+    juez_nombre = serializers.CharField(source='juez.nombre', read_only=True)
+
     class Meta:
         model = Puntuacion
-        fields = '__all__'
+        fields = ['id', 'participante_nombre', 'juez_nombre', 'simetria', 'definicion', 'comentarios', 'participante', 'juez']

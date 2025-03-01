@@ -22,7 +22,7 @@ class Juez(models.Model):
 
 class Puntuacion(models.Model):
     participante = models.ForeignKey(Participante, on_delete=models.CASCADE)
-    juez = models.ForeignKey(Juez, on_delete=models.CASCADE)
+    juez = models.ForeignKey(Juez, on_delete=models.CASCADE)  # Asegúrate de incluir este campo
     simetria = models.FloatField()
     definicion = models.FloatField()
     comentarios = models.TextField()

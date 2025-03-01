@@ -1,21 +1,22 @@
 // src/pages/Resultados.js
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const Resultados = () => {
-  const [participantes, setParticipantes] = useState([]);
+  const [puntuaciones, setPuntuaciones] = useState([]); // Lista de puntuaciones
 
+  // Obtener las puntuaciones al cargar el componente
   useEffect(() => {
-    const fetchParticipantes = async () => {
+    const fetchPuntuaciones = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/participantes/');
-        setParticipantes(response.data);
+        const response = await axios.get('http://localhost:8000/api/puntuaciones/');
+        setPuntuaciones(response.data);
       } catch (error) {
-        console.error("Error fetching participantes:", error);
+        console.error("Error fetching puntuaciones:", error);
       }
     };
 
-    fetchParticipantes();
+    fetchPuntuaciones();
   }, []);
 
   return (
@@ -28,21 +29,21 @@ const Resultados = () => {
           <table className="table table-striped">
             <thead>
               <tr>
-                <th>Nombre</th>
-                <th>Edad</th>
-                <th>Género</th>
-                <th>Peso</th>
-                <th>Categoría</th>
+                <th>Participante</th>
+                <th>Juez</th>
+                <th>Simetría</th>
+                <th>Definición</th>
+                <th>Comentarios</th>
               </tr>
             </thead>
             <tbody>
-              {participantes.map((participante) => (
-                <tr key={participante.id}>
-                  <td>{participante.nombre}</td>
-                  <td>{participante.edad}</td>
-                  <td>{participante.genero}</td>
-                  <td>{participante.peso}</td>
-                  <td>{participante.categoria}</td>
+              {puntuaciones.map((puntuacion) => (
+                <tr key={puntuacion.id}>
+                  <td>{puntuacion.participante_nombre}</td>
+                  <td>{puntuacion.juez_nombre}</td>
+                  <td>{puntuacion.simetria}</td>
+                  <td>{puntuacion.definicion}</td>
+                  <td>{puntuacion.comentarios}</td>
                 </tr>
               ))}
             </tbody>
