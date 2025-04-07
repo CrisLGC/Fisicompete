@@ -9,6 +9,7 @@ const IngresoPuntuaciones = () => {
   const [simetria, setSimetria] = useState(0); // Puntuación de simetría
   const [definicion, setDefinicion] = useState(0); // Puntuación de definición
   const [comentarios, setComentarios] = useState(''); // Comentarios del juez
+  const [errors, setErrors] = useState({}); // Estado para manejar errores
 
   // Obtener la lista de participantes y jueces al cargar el componente
   useEffect(() => {
@@ -27,9 +28,25 @@ const IngresoPuntuaciones = () => {
     fetchData();
   }, []);
 
+  // Validar los campos del formulario
+  const validate = () => {
+    const newErrors = {};
+    if (!selectedParticipante) newErrors.selectedParticipante = 'Debe seleccionar un participante.';
+    if (!selectedJuez) newErrors.selectedJuez = 'Debe seleccionar un juez.';
+    if (simetria < 0 || simetria > 10) newErrors.simetria = 'La puntuación de simetría debe estar entre 0 y 10.';
+    if (definicion < 0 || definicion > 10) newErrors.definicion = 'La puntuación de definición debe estar entre 0 y 10.';
+    if (!comentarios.trim()) newErrors.comentarios = 'Los comentarios son obligatorios.';
+    return newErrors;
+  };
+
   // Manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const validationErrors = validate();
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
     try {
       const response = await axios.post('http://localhost:8000/api/puntuaciones/', {
         participante: parseInt(selectedParticipante, 10),  // Convertir a número
@@ -74,6 +91,7 @@ const IngresoPuntuaciones = () => {
                   </option>
                 ))}
               </select>
+              {errors.selectedParticipante && <small className="text-danger">{errors.selectedParticipante}</small>}
             </div>
 
             {/* Selección de Juez */}
@@ -92,6 +110,7 @@ const IngresoPuntuaciones = () => {
                   </option>
                 ))}
               </select>
+              {errors.selectedJuez && <small className="text-danger">{errors.selectedJuez}</small>}
             </div>
 
             {/* Puntuación de Simetría */}
@@ -107,6 +126,7 @@ const IngresoPuntuaciones = () => {
                 onChange={(e) => setSimetria(e.target.value)}
                 required
               />
+              {errors.simetria && <small className="text-danger">{errors.simetria}</small>}
             </div>
 
             {/* Puntuación de Definición */}
@@ -122,6 +142,7 @@ const IngresoPuntuaciones = () => {
                 onChange={(e) => setDefinicion(e.target.value)}
                 required
               />
+              {errors.definicion && <small className="text-danger">{errors.definicion}</small>}
             </div>
 
             {/* Comentarios */}
@@ -131,7 +152,9 @@ const IngresoPuntuaciones = () => {
                 className="form-control"
                 value={comentarios}
                 onChange={(e) => setComentarios(e.target.value)}
+                required
               />
+              {errors.comentarios && <small className="text-danger">{errors.comentarios}</small>}
             </div>
 
             {/* Botón de Envío */}
