@@ -18,6 +18,9 @@ const Navbar = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/puntuaciones">Ingreso de Puntuaciones</Link> 
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/jueces">Añadir Juez</Link>
+            </li>
           </ul>
         </div>
       </div>
